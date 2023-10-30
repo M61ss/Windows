@@ -13,6 +13,8 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <strsafe.h>
 
 /*  In this table there are some typedefs that allow to use ASCII or UNICODE, based on the UNICODE compilation constant:
     +----------------+--------------------+-------------------------+
@@ -52,11 +54,11 @@ int main(void) {
     // The 'L' prefix is necessary for strings encoded with UNICODE (if the macro UNICODE is defined the 'L' prefix is required)
     const wchar_t string[] = L"Hello";
 
+    // REMEMBER: In general the 'A' suffix means "ASCII" and the 'W' means "wide". In fact in the Windows API the functions are actually macros expanding
+    // to two functions with these suffixes
+
     // ? CreateMutex is a constructor ?
-    // 
     // Exist 2 functions: CreateMutexA ('A' stands for "ASCII", ASCII variant) or CreateMutexW ('W' stands for "wide", UNICODE variant).
-    // !!! This variant are common to be defined for a lot of functions of windows.h !!!
-    // 
     // The macro TEXT is equal to put 'L' prefix before the string (a smaller version of this macro is _T, that is defined in <tchar.h>) 
     HANDLE hMutex = ::CreateMutex(nullptr, FALSE, TEXT("MyMutex"));
 
@@ -70,6 +72,18 @@ int main(void) {
     ::GetSystemDirectory(path, MAX_PATH);
     // %ws identifies UNICODE strings
     printf("System directory: %ws\n", path);
+
+    // REMEMBER: A set of safe string functions are available in the header <strsafe.h>
+
+    // It is a matter of taste about what set of functions use. The only important thing is avoid the unsafe functions, so classic C/C++ functions
+    // Unsafe funtions are deprecated, but defining some macros (for example _CRT_SECURE_NO_WARNINGS) they will be accepted by the compiler.
+    // It is a bad practice define this macros while coding something new because the only reason that you would prefer an unsafe function to a 
+    // safe one is retrocompatibility, so old source code that for many reason cannot be touched
+
+    // If i want to know the number of elements of an array (or vector) i can use the macro _countof(array)
+    char array[10];
+    size_t elements = _countof(array);
+    printf("%zu\n", elements);
 
     return 0;
 }
