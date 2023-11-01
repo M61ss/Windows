@@ -15,7 +15,6 @@
 #define BUILD_WINDOWS
 #include <windows.h>
 #include <stdio.h>
-#include <strsafe.h>
 
 /*  In this table there are some typedefs that allow to use ASCII or UNICODE, based on the UNICODE compilation constant:
     +----------------+--------------------+-------------------------+
@@ -104,6 +103,10 @@ int main(void) {
 
     // Quering the system for the Windows version
     OSVERSIONINFO vi = { sizeof(vi) };
+
+    // This function is deprecated because of its impossibility to find the correct version of Windows by itself, so it needs the defining of the macro BUILD_WINDOWS.
+    // It needs the file "manifest.xml" (you can find it into the project folder) to detect the correct Windows version uncommenting
+    // the line of respetive OS where the code will run.
     ::GetVersionEx(&vi);
 
     printf("Version: %d.%d.%d\n", vi.dwMajorVersion, vi.dwMinorVersion, vi.dwBuildNumber);
