@@ -11,9 +11,10 @@
 #define _UNICODE
 #endif // !_UNICODE
 
+// I need this macro because the function "GetVersionExW" was deprecated (reason: defense from old versions)
+#define BUILD_WINDOWS
 #include <windows.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <strsafe.h>
 
 /*  In this table there are some typedefs that allow to use ASCII or UNICODE, based on the UNICODE compilation constant:
@@ -75,16 +76,37 @@ int main(void) {
 
     // REMEMBER: A set of safe string functions are available in the header <strsafe.h>
 
-    // It is a matter of taste about what set of functions use. The only important thing is avoid the unsafe functions, so classic C/C++ functions
+    // It is a matter of taste about what set of functions use. The only important thing is avoid the unsafe functions, so some classic C/C++ functions
     // Unsafe funtions are deprecated, but defining some macros (for example _CRT_SECURE_NO_WARNINGS) they will be accepted by the compiler.
     // It is a bad practice define this macros while coding something new because the only reason that you would prefer an unsafe function to a 
-    // safe one is retrocompatibility, so old source code that for many reason cannot be touched
+    // safe one is retrocompatibility, so old source code that for many reason cannot be touched. It still be another good practice to use functions
+    // contained in C/C++ standard library unless there is a good reason to use something else (for example unsafe functions)
 
     // If i want to know the number of elements of an array (or vector) i can use the macro _countof(array)
     char array[10];
     size_t elements = _countof(array);
     printf("%zu\n", elements);
 
+    // Example of how to handle HRESULT errors (it is clear that this code is now difficult, it is only an example of how to handle errors)
+    IGlobalInterfaceTable* pGit;
+    HRESULT hr = ::CoCreateInstance(CLSID_StdGlobalInterfaceTable, nullptr, CLSCTX_ALL, IID_IGlobalInterfaceTable, (void**)&pGit);
+    if (FAILED(hr)) {
+        printf("Error: %08X\n", hr);
+    }
+    else {
+        // ... operations ...
+
+        // release interface pointer
+        pGit->Release();
+    }
+
+    // REMEMBER: however, it is a good practice to go on documentations of every function controlling their return values
+
+    // Quering the system for the Windows version
+    OSVERSIONINFO vi = { sizeof(vi) };
+    ::GetVersionEx(&vi);
+
+    printf("Version: %d.%d.%d\n", vi.dwMajorVersion, vi.dwMinorVersion, vi.dwBuildNumber);
+
     return 0;
 }
-
