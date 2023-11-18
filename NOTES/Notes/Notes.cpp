@@ -15,6 +15,8 @@
 #define BUILD_WINDOWS
 #include <windows.h>
 #include <stdio.h>
+// Inclusion for the usage of CString
+#include <atlstr.h>
 
 /*  In this table there are some typedefs that allow to use ASCII or UNICODE, based on the UNICODE compilation constant:
     +----------------+--------------------+-------------------------+
@@ -35,8 +37,23 @@
 
     The 'T' is meaningless, it is there only cause a retypedefinition (ex. typedef CHAR TCHAR)                               */
 
+// Function used subsequently in the treatment of concept of mutex
+#define WM_NOTIFY_INSTANCE (WM_USER + 100)
+
+void NotifyOtherInstance() {
+    auto hWnd = ::FindWindow(nullptr, L"Single Instance");
+    if (!hWnd) {
+        ::MessageBox(nullptr, L"Failed to locate other instance window", L"Single Instance", MB_OK);
+        return;
+    }
+
+    ::PostMessage(hWnd, WM_NOTIFY_INSTANCE, ::GetCurrentProcessId(), 0);
+    ::ShowWindow(hWnd, SW_NORMAL);
+    ::SetForegroundWindow(hWnd);
+}
+
 int main(void) {
-    // struct(?) that contains native system informationas
+    // Object that contains native system informationas
     SYSTEM_INFO si;
 
     // This is a function that obtain some essential infos about the system
@@ -57,7 +74,6 @@ int main(void) {
     // REMEMBER: In general the 'A' suffix means "ASCII" and the 'W' means "wide". In fact in the Windows API the functions are actually macros expanding
     // to two functions with these suffixes
 
-    // ? CreateMutex is a constructor ?
     // Exist 2 functions: CreateMutexA ('A' stands for "ASCII", ASCII variant) or CreateMutexW ('W' stands for "wide", UNICODE variant).
     // The macro TEXT is equal to put 'L' prefix before the string (a smaller version of this macro is _T, that is defined in <tchar.h>) 
     HANDLE hMutex = ::CreateMutex(nullptr, FALSE, TEXT("MyMutex"));
@@ -110,6 +126,23 @@ int main(void) {
     ::GetVersionEx(&vi);
 
     printf("Version: %d.%d.%d\n", vi.dwMajorVersion, vi.dwMinorVersion, vi.dwBuildNumber);
+
+    // A mutex is a syncronization operation bethween processes or threads. It prevents the simultaneous access to data in the memory from parallel tasks.
+    // For create a process it is needed to create a mutex. A mutex is used on Windows for example to prevent the simultaneous run of the same program
+    // launched multiple times, for example to run a sofware that is already running (this constraint is called "single instance").
+    // Here an example of a mutex.
+    HANDLE hMutex = ::CreateMutex(nullptr, FALSE, L"SingleInstanceMutex");
+    if (!hMutex) {
+        // It is extreamly rare to fail to create mutex...
+        CString text;
+        text.Format(L"Failed to create mutex (Error: %d)", ::GetLastError());
+        ::MessageBox(nullptr, text, L"Single Instance", MB_OK);
+        return 0;
+    }
+    if (::GetLastError() == ERROR_ALREADY_EXISTS) {
+        NotifyOtherInstance();
+        return 0;
+    }
 
     return 0;
 }
