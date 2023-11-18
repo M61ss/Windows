@@ -63,7 +63,7 @@ int main(void) {
 
     printf("Number of Logical Processors: %d\n", si.dwNumberOfProcessors);
     printf("Page size: %d Bytes\n", si.dwPageSize);
-    printf("Preocessor Mask: 0x%p\n", (PVOID)si.dwActiveProcessorMask);
+    printf("Processor Mask: 0x%p\n", (PVOID)si.dwActiveProcessorMask);
     printf("Minimum process address: 0x%p\n", si.lpMinimumApplicationAddress);
     printf("Maximum process address: 0x%p\n", si.lpMaximumApplicationAddress);
 
@@ -102,7 +102,7 @@ int main(void) {
     size_t elements = _countof(array);
     printf("%zu\n", elements);
 
-    // Example of how to handle HRESULT errors (it is clear that this code is now difficult, it is only an example of how to handle errors)
+    // Example of how to handle HRESULT errors (it is clear that this code is difficult at this moment, it is only an example of how to handle errors)
     IGlobalInterfaceTable* pGit;
     HRESULT hr = ::CoCreateInstance(CLSID_StdGlobalInterfaceTable, nullptr, CLSCTX_ALL, IID_IGlobalInterfaceTable, (void**)&pGit);
     if (FAILED(hr)) {
