@@ -1,0 +1,3 @@
+﻿  Wmain.cpp
+C:\Users\Mattia\Documents\GitHub projects\WindowsReference\Wmain\Wmain\Wmain.cpp(16,45): warning C4326: return type of 'wmain' should be 'int' instead of 'void'
+  Wmain.vcxproj -> C:\Users\Mattia\Documents\GitHub projects\WindowsReference\Wmain\x64\Debug\Wmain.exe
