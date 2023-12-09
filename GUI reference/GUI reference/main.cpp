@@ -4,20 +4,42 @@
 // This is an handle to identify my window
 HWND hwndWNDMain;
 
-// This object is needed for store messages from other instance
-MSG msg;
+// This function is used to manage messages dispatched from the window. Its name is arbitrary
+LRESULT CALLBACK WndMainProc(
+	HWND hWnd,				// Handle of who dispatch message
+	UINT message,			// The message
+	WPARAM wParam,			// ???
+	LPARAM lParam			// ???
+) {
+	// Here I manage messages switching UINT message
+	switch (message) {
+	case WM_CREATE:
+		std::cout << "WM_CREATE!\n";	// (not necessary)
+		break;
+	case WM_DESTROY:
+		// This function allows to close the window
+		PostQuitMessage(0);		// The parameter is the post quit message for the console
+		break;
+	default:
+		// This is a standard function. All messages that are not managed in case defined by programmer, will be managed by it
+		return DefWindowProc(hWnd, message, wParam, lParam);		// Parameters are the same of WndMainProc
+		break;
+	}
 
-// This is the structure of the main for a windows application:
-// hInstance = handle of the current instance
-// hPrevInstance = handle of the previous instance (maybe this is a child of another)
-// lCmdLine = a string that contains the command line arguments
-// nCmdShow = ???
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lCmdLine, int nCmdShow) {
-	// Here is a data structure that contains basic informations of the window that we want to create
-	WNDCLASSEX wc;
+	// It is clear that there will be a warning saying: not all control paths return a value. It is normal, the function correctly works
+}
 
-	// I have to set to zero all the memory of the data structure to avoid crashes
-	ZeroMemory(&wc, sizeof(WNDCLASSEX));
+// This is the main for a windows application. _In_ and _In_opt_ are named SAL annotations
+INT WINAPI WinMain(
+	_In_ HINSTANCE hInstance,			// Handle of the current instance
+	_In_opt_ HINSTANCE hPrevInstance,	// Handle of the previous instance (maybe this is a child of another)
+	_In_ LPSTR lCmdLine,				// A string that contains the command line arguments
+	_In_ int nCmdShow					// ???
+) {
+	WNDCLASSEX wc;		// Here is a data structure that contains basic informations of the window that we want to create
+	MSG msg;			// This object is needed for store messages from other instance
+
+	ZeroMemory(&wc, sizeof(WNDCLASSEX));	// I have to set to zero all the memory of the data structure to avoid crashes
 
 	// Here I fill the fields of past declered wc struct. All of these are feature that are documented on Microsoft Learn.
 	// So, if you want to use different values from these used in this example you can visit https://learn.microsoft.com/it-it/training/?source=learn
@@ -31,8 +53,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lCmdLine,
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);	// This is the standard cursor, but on the documentation is possible to find all cursor you want
 	wc.hbrBackground = nullptr;						// This is the background color. So the background color will be standard (white)
 	wc.lpszMenuName = nullptr;						// This is the contestual menu of the window (the higher menu bar, like file, edit, view, ecc)
-	wc.lpszClassName = L"wndRepairClass";			// This is the name of the class
-	wc.lpfnWndProc = ;								// This is a pointer to the information of the current windows process (spannometric definition...)
+	wc.lpszClassName = L"wndMainClass";			// This is the name of the class
+	wc.lpfnWndProc = WndMainProc;					// This is a pointer to the information of the current windows process (spannometric definition...for many reason this function doesn't need parameters...)
 
 	// Verifing that wc has been successfully registered
 	if (!RegisterClassEx(&wc)) {
@@ -48,8 +70,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lCmdLine,
 
 	// Here I create my window
 	hwndWNDMain = CreateWindow(
-		L"wndRepairClass",													// Here I report the class name that I assigned before in wc struct
-		L"WinRepair",														// This is the name shown of the window
+		L"wndMainClass",													// Here I report the class name that I assigned before in wc struct
+		L"WinMain",														// This is the name shown of the window
 		WS_BORDER | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_VISIBLE,	// These are styles of the window
 		CW_USEDEFAULT,														// This is the starter x coord when I open the window 
 		CW_USEDEFAULT,														// This is the starter y coord when I open the window 
