@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Users\mas20\Downloads\Window widgets\Window widgets\main.cpp(18): warning C4715: 'WndMainProc': not all control paths return a value
+  Window widgets.vcxproj -> C:\Users\mas20\Downloads\Window widgets\x64\Debug\Window widgets.exe
