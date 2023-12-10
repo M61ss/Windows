@@ -8,7 +8,7 @@ HWND hwndWNDMain;
 LRESULT CALLBACK WndMainProc(
 	HWND hWnd,				// Handle of who dispatch message
 	UINT message,			// The message
-	WPARAM wParam,			// ???
+	WPARAM wParam,			// It is a string that in its first 16 bits contains info about a command given to the window
 	LPARAM lParam			// ???
 ) {
 	// Here I manage messages switching UINT message
@@ -53,7 +53,7 @@ INT WINAPI WinMain(
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);	// This is the standard cursor, but on the documentation is possible to find all cursor you want
 	wc.hbrBackground = nullptr;						// This is the background color. So the background color will be standard (white)
 	wc.lpszMenuName = nullptr;						// This is the contestual menu of the window (the higher menu bar, like file, edit, view, ecc)
-	wc.lpszClassName = L"wndMainClass";			// This is the name of the class
+	wc.lpszClassName = L"wndMainClass";				// This is the name of the class
 	wc.lpfnWndProc = WndMainProc;					// This is a pointer to the information of the current windows process (spannometric definition...for many reason this function doesn't need parameters...)
 
 	// Verifing that wc has been successfully registered
@@ -71,7 +71,7 @@ INT WINAPI WinMain(
 	// Here I create my window
 	hwndWNDMain = CreateWindow(
 		L"wndMainClass",													// Here I report the class name that I assigned before in wc struct
-		L"WinMain",														// This is the name shown of the window
+		L"WinMain",															// This is the name shown of the window
 		WS_BORDER | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_VISIBLE,	// These are styles of the window
 		CW_USEDEFAULT,														// This is the starter x coord when I open the window 
 		CW_USEDEFAULT,														// This is the starter y coord when I open the window 
@@ -97,15 +97,15 @@ INT WINAPI WinMain(
 
 	// Now I display the window
 	ShowWindow(
-		hwndWNDMain,		// The handle of the window
+		hwndWNDMain,		// The handle of the window to show
 		SW_SHOWNORMAL		// ???
 	);
 
 	// This is the last essential part to make the window work correctly
 	// This is a loop to allow the window to recieve messages from windows and controls (including OS)
-	while (GetMessage(&msg, nullptr, 0, 0)) {		// Structure of the function GetMessage ???
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+	while (GetMessage(&msg, nullptr, 0, 0)) {		// Structure of the function GetMessage: ???
+		TranslateMessage(&msg);		// ???
+		DispatchMessage(&msg);		// ???
 	}
 
 	return 0;
