@@ -1,4 +1,4 @@
 ﻿  main.cpp
-C:\Users\mas20\Documents\GitHub projects\WindowsReference\GUI\Window widgets\Window widgets\main.cpp(61,21): warning C4312: 'type cast': conversion from 'int' to 'HMENU' of greater size
-C:\Users\mas20\Documents\GitHub projects\WindowsReference\GUI\Window widgets\Window widgets\main.cpp(155): warning C4715: 'WndMainProc': not all control paths return a value
-  Window widgets.vcxproj -> C:\Users\mas20\Documents\GitHub projects\WindowsReference\GUI\Window widgets\x64\Debug\Window widgets.exe
+C:\Users\Mattia\Documents\GitHub projects\WindowsReference\GUI\Window widgets\Window widgets\main.cpp(61,21): warning C4312: 'type cast': conversion from 'int' to 'HMENU' of greater size
+C:\Users\Mattia\Documents\GitHub projects\WindowsReference\GUI\Window widgets\Window widgets\main.cpp(167): warning C4715: 'WndMainProc': not all control paths return a value
+  Window widgets.vcxproj -> C:\Users\Mattia\Documents\GitHub projects\WindowsReference\GUI\Window widgets\x64\Debug\Window widgets.exe

@@ -1,3 +1,7 @@
+/*
+To show the usage of Win32 to create widgets in this code has been developed a rudimental calculator. Clearly the calculator is not efficient, this is not the purpose
+*/
+
 #include <iostream>
 #include <windows.h>
 #include <commctrl.h>	// Here are defined all controls
@@ -17,6 +21,9 @@ LPCWSTR symbols[4][4] = {
 	{L"7",L"8",L"9",L"*"},
 	{L"",L"0",L"=",L"/"}
 };
+
+double a = 0, b = 0;	// Variables to do math ops (limited to this example)
+int check = 0;			// This variable checks how many times the used pressed a operation button
 
 LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
@@ -79,10 +86,10 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 	case WM_COMMAND:
 		switch (HIWORD(wParam)) {		// HIWORD (high word) is a function that allows to get wParam first 16 bits (see "Vital parts of a window" for the complete explanation)
 		case BN_CLICKED:
+			WCHAR buffer[1000];			// Buffer to store the text which will be read from textbox (this way the text written before will be not lost). This is an advanced technique
 			switch (LOWORD(wParam)) {		// LOWORD (low word) do the same thing of HIWORD, but for 16 bits after. In this case these bits are the ids that I passed as HMENU parameter creating buttons
 			// Here a case for every single id (maybe can I use a more intelligent and compact system?)
 			case 0:
-				WCHAR buffer[1000];		// Buffer to store the text which will be read from textbox (this way the text written before will be not lost). This is an advanced technique
 				Edit_GetText(			// This function gets some text from a textbox
 					hwndTXT_input,		// Handle of textbox from I want to read
 					buffer,				// Buffer to store text read from textbox
@@ -96,49 +103,74 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 					buffer				// Text to write
 				);
 				break;
-			case 1:
-				Edit_SetText(hwndTXT_input, L"2");
+			case 1:		
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"2");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 2:
-				Edit_SetText(hwndTXT_input, L"3");
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"3");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
-			case 3:
-				Edit_SetText(hwndTXT_input, L"+");
+			case 3: // +
+				if (check == 0) {
+					a = std::wcstod(buffer, nullptr);
+					check = 1;
+				}
+				else if (check == 1) {
+					b = std::wcstod(buffer, nullptr);
+					check = 2;
+				}
 				break;
 			case 4:
-				Edit_SetText(hwndTXT_input, L"4");
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"4");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 5:
-				Edit_SetText(hwndTXT_input, L"5");
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"5");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 6:
-				Edit_SetText(hwndTXT_input, L"6");
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"6");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
-			case 7:
-				Edit_SetText(hwndTXT_input, L"-");
+			case 7: // -
 				break;
 			case 8:
-				Edit_SetText(hwndTXT_input, L"7");
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"7");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 9:
-				Edit_SetText(hwndTXT_input, L"8");
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"8");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 10:
-				Edit_SetText(hwndTXT_input, L"9");
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"9");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
-			case 11:
-				Edit_SetText(hwndTXT_input, L"*");
+			case 11: // *
 				break;
-			case 12:
+			case 12: // Nothing to do if this button is pressed
 				break;
 			case 13:
-				Edit_SetText(hwndTXT_input, L"0");
+				Edit_GetText(hwndTXT_input, buffer, 1000);
+				wcscat_s(buffer, L"0");
+				Edit_SetText(hwndTXT_input, buffer);
 				break;
-			case 14:
-				Edit_SetText(hwndTXT_input, L"=");
+			case 14: // =
+				if (check == 2) {
+
+					check = 0;
+				}
 				break;
-			case 15:
-				Edit_SetText(hwndTXT_input, L"/");
+			case 15: // /
 				break;
 			}
 			break;
