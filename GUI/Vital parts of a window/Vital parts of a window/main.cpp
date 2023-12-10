@@ -8,7 +8,7 @@ HWND hwndWNDMain;
 LRESULT CALLBACK WndMainProc(
 	HWND hWnd,				// Handle of who dispatch message
 	UINT message,			// The message
-	WPARAM wParam,			// It is a string that in its first 16 bits contains info about a command given to the window
+	WPARAM wParam,			// It is a 32-bit number that in its first 16 bits contains info about the type of the command given to the window (in other 16 ???)
 	LPARAM lParam			// ???
 ) {
 	// Here I manage messages switching UINT message

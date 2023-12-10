@@ -1,6 +1,7 @@
 #include <iostream>
 #include <windows.h>
 #include <commctrl.h>	// Here are defined all controls
+#include <windowsx.h>	// Here some macros to simplify operations, for example, of writing in textbox ('x' stands for 'extended')
 
 HWND hwndWNDMain;
 
@@ -76,8 +77,71 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 		break;
 	case WM_COMMAND:
-		switch (HIWORD(wParam)) {
-
+		switch (HIWORD(wParam)) {		// HIWORD (high word) is a function that allows to get wParam first 16 bits (see "Vital parts of a window" for the complete explanation)
+		case BN_CLICKED:
+			switch (LOWORD(wParam)) {		// LOWORD (low word) do the same thing of HIWORD, but for 16 bits after. In this case these bits are the ids that I passed as HMENU parameter creating buttons
+			// Here a case for every single id (maybe can I use a more intelligent and compact system?)
+			case 0:
+				WCHAR buffer[1000];		// Buffer to store the text which will be read from textbox (this way the text written before will be not lost). This is an advanced technique
+				Edit_GetText(			// This function gets some text from a textbox
+					hwndTXT_input,		// Handle of textbox from I want to read
+					buffer,				// Buffer to store text read from textbox
+					1000				// Buffer dimension
+				);
+				
+				wcscat_s(buffer, L"1");		// Concatenating wstrings
+				
+				Edit_SetText(			// This function writes some text into a textbox
+					hwndTXT_input,		// Handle of textbox where I want to write
+					buffer				// Text to write
+				);
+				break;
+			case 1:
+				Edit_SetText(hwndTXT_input, L"2");
+				break;
+			case 2:
+				Edit_SetText(hwndTXT_input, L"3");
+				break;
+			case 3:
+				Edit_SetText(hwndTXT_input, L"+");
+				break;
+			case 4:
+				Edit_SetText(hwndTXT_input, L"4");
+				break;
+			case 5:
+				Edit_SetText(hwndTXT_input, L"5");
+				break;
+			case 6:
+				Edit_SetText(hwndTXT_input, L"6");
+				break;
+			case 7:
+				Edit_SetText(hwndTXT_input, L"-");
+				break;
+			case 8:
+				Edit_SetText(hwndTXT_input, L"7");
+				break;
+			case 9:
+				Edit_SetText(hwndTXT_input, L"8");
+				break;
+			case 10:
+				Edit_SetText(hwndTXT_input, L"9");
+				break;
+			case 11:
+				Edit_SetText(hwndTXT_input, L"*");
+				break;
+			case 12:
+				break;
+			case 13:
+				Edit_SetText(hwndTXT_input, L"0");
+				break;
+			case 14:
+				Edit_SetText(hwndTXT_input, L"=");
+				break;
+			case 15:
+				Edit_SetText(hwndTXT_input, L"/");
+				break;
+			}
+			break;
 		}
 		break;
 	case WM_DESTROY:
