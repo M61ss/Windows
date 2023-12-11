@@ -3,6 +3,7 @@ To show the usage of Win32 to create widgets in this code has been developed a r
 */
 
 #include <iostream>
+#include <string>
 #include <windows.h>
 #include <commctrl.h>	// Here are defined all controls
 #include <windowsx.h>	// Here some macros to simplify operations, for example, of writing in textbox ('x' stands for 'extended')
@@ -23,7 +24,7 @@ LPCWSTR symbols[4][4] = {
 };
 
 double a = 0, b = 0;	// Variables to do math ops (limited to this example)
-int check = 0;			// This variable checks how many times the used pressed a operation button
+CHAR check = 0;			// This variable checks how many times the used pressed a operation button
 
 LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
@@ -86,14 +87,14 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 	case WM_COMMAND:
 		switch (HIWORD(wParam)) {		// HIWORD (high word) is a function that allows to get wParam first 16 bits (see "Vital parts of a window" for the complete explanation)
 		case BN_CLICKED:
-			WCHAR buffer[1000];			// Buffer to store the text which will be read from textbox (this way the text written before will be not lost). This is an advanced technique
+			WCHAR buffer[1000];	buffer[0] = L'\0';		// Buffer to store the text which will be read from textbox (this way the text written before will be not lost). This is an advanced technique
 			switch (LOWORD(wParam)) {		// LOWORD (low word) do the same thing of HIWORD, but for 16 bits after. In this case these bits are the ids that I passed as HMENU parameter creating buttons
 			// Here a case for every single id (maybe can I use a more intelligent and compact system?)
 			case 0:
-				Edit_GetText(			// This function gets some text from a textbox
+				Edit_GetText(			// This function gets some text from a textbox (the buffer is redeclered every time, so I have to read from input textbox before writing on output)
 					hwndTXT_input,		// Handle of textbox from I want to read
 					buffer,				// Buffer to store text read from textbox
-					1000				// Buffer dimension
+					999					// Buffer dimension
 				);
 				
 				wcscat_s(buffer, L"1");		// Concatenating wstrings
@@ -104,54 +105,53 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 				);
 				break;
 			case 1:		
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"2");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 2:
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"3");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
-			case 3: // +
+			case 3:
 				if (check == 0) {
-					a = std::wcstod(buffer, nullptr);
-					check = 1;
-				}
-				else if (check == 1) {
-					b = std::wcstod(buffer, nullptr);
-					check = 2;
+					a = _wtof(buffer);
+					check = '+';
+					Edit_GetText(hwndTXT_input, buffer, 999);
+					wcscat_s(buffer, L" + ");
+					Edit_SetText(hwndTXT_input, buffer);
 				}
 				break;
 			case 4:
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"4");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 5:
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"5");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 6:
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"6");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 7: // -
 				break;
 			case 8:
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"7");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 9:
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"8");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 10:
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"9");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
@@ -160,14 +160,26 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			case 12: // Nothing to do if this button is pressed
 				break;
 			case 13:
-				Edit_GetText(hwndTXT_input, buffer, 1000);
+				Edit_GetText(hwndTXT_input, buffer, 999);
 				wcscat_s(buffer, L"0");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 14: // =
-				if (check == 2) {
-
+				double numerical_res;
+				switch (check) {
+				case '+':
+					b = _wtof(buffer);
+					numerical_res = a + b;
+					WCHAR sum_result[1000]; sum_result[0] = L'\0';
+					_snwprintf_s(sum_result, 999, _TRUNCATE, L"%f", numerical_res);
+					wcscpy_s(buffer, sum_result);
+					Edit_SetText(hwndTXT_output, buffer);
+					Edit_SetText(hwndTXT_input, L"");
 					check = 0;
+				default:
+					Edit_GetText(hwndTXT_input, buffer, 999);
+					Edit_SetText(hwndTXT_output, buffer);
+					break;
 				}
 				break;
 			case 15: // /
