@@ -87,11 +87,11 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 	case WM_COMMAND:
 		switch (HIWORD(wParam)) {		// HIWORD (high word) is a function that allows to get wParam first 16 bits (see "Vital parts of a window" for the complete explanation)
 		case BN_CLICKED:
-			WCHAR buffer[1000];	buffer[0] = L'\0';		// Buffer to store the text which will be read from textbox (this way the text written before will be not lost). This is an advanced technique
+			WCHAR buffer[1000];	buffer[0] = L'\0';		// Buffer to store the text which will be read from textbox
 			switch (LOWORD(wParam)) {		// LOWORD (low word) do the same thing of HIWORD, but for 16 bits after. In this case these bits are the ids that I passed as HMENU parameter creating buttons
 			// Here a case for every single id (maybe can I use a more intelligent and compact system?)
 			case 0:
-				Edit_GetText(			// This function gets some text from a textbox (the buffer is redeclered every time, so I have to read from input textbox before writing on output)
+				Edit_GetText(			// This function gets some text from a textbox (the buffer is redeclered every time, so I have to read from input textbox before overwrite output)
 					hwndTXT_input,		// Handle of textbox from I want to read
 					buffer,				// Buffer to store text read from textbox
 					999					// Buffer dimension
@@ -117,10 +117,8 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			case 3:
 				if (check == 0) {
 					a = _wtof(buffer);
+					Edit_SetText(hwndTXT_input, L"");		// Cleaning input textbox to not compromise conversion to double
 					check = '+';
-					Edit_GetText(hwndTXT_input, buffer, 999);
-					wcscat_s(buffer, L" + ");
-					Edit_SetText(hwndTXT_input, buffer);
 				}
 				break;
 			case 4:
@@ -166,21 +164,22 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 				break;
 			case 14: // =
 				double numerical_res;
+				WCHAR result[1000];
 				switch (check) {
 				case '+':
 					b = _wtof(buffer);
 					numerical_res = a + b;
-					WCHAR sum_result[1000]; sum_result[0] = L'\0';
-					_snwprintf_s(sum_result, 999, _TRUNCATE, L"%f", numerical_res);
-					wcscpy_s(buffer, sum_result);
+					swprintf_s(result, L"%f", numerical_res);
+					wcscpy_s(buffer, result);
 					Edit_SetText(hwndTXT_output, buffer);
-					Edit_SetText(hwndTXT_input, L"");
 					check = 0;
+					break;
 				default:
 					Edit_GetText(hwndTXT_input, buffer, 999);
 					Edit_SetText(hwndTXT_output, buffer);
 					break;
 				}
+				Edit_SetText(hwndTXT_input, L"");		// Cleaning input textbox
 				break;
 			case 15: // /
 				break;
