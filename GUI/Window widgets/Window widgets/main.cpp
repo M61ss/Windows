@@ -6,7 +6,7 @@ To show the usage of Win32 to create widgets in this code has been developed a r
 #include <string>
 #include <windows.h>
 #include <commctrl.h>	// Here are defined all controls
-#include <windowsx.h>	// Here some macros to simplify operations, for example, of writing in textbox ('x' stands for 'extended')
+#include <windowsx.h>	// Here some macros to simplify operations, for example, of writing in textbox (indeed 'x' stands for 'extended') or reading from
 
 HWND hwndWNDMain;
 
@@ -24,7 +24,7 @@ LPCWSTR symbols[4][4] = {
 };
 
 double a = 0, b = 0;	// Variables to do math ops (limited to this example)
-CHAR check = 0;			// This variable checks how many times the used pressed a operation button
+CHAR check = 0;			// This variable checks how many times the used pressed a operation button. Basic case is check = 0. This way the program knows that the user is inserting the first number
 
 LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
@@ -62,8 +62,8 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			nullptr
 		);
 
-		// Classic double-for for scroll instance of matrix
-		for (int i = 0, id = 0; i < 4; i++) {		// id is an unambiguos identifier for every single button
+		// Classic double-for to scroll instances of matrix
+		for (int i = 0, id = 0; i < 4; i++) {		// id is an unambiguos identifier for every single button. It is a temporary variable used to build the low part of HMENU parameter
 			for (int j = 0; j < 4; j++) {
 				// Button widgets
 				hwndBTN[i][j] = CreateWindow(
@@ -75,11 +75,11 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 					60,
 					60,
 					hWnd,
-					(HMENU)id,									// For WC_BUTTON widgets this parameter (his type is: HMENU) is used for identify the button (ignore the warning: conversion from 'int' to 'HMENU' of greater size) 
+					(HMENU)id,									// For WC_BUTTON widgets this parameter (his type is: HMENU) is used for identify the button (ignore the warning: conversion from 'int' to 'HMENU' of greater size, it is wanted) 
 					nullptr,
 					nullptr
 				);
-				id++;
+				id++;			// This way id grows for every cycle of double-for (id is saved into the father-for)
 			}
 		}
 
@@ -114,8 +114,9 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 				wcscat_s(buffer, L"3");
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
-			case 3:
+			case 3: // +
 				if (check == 0) {
+					Edit_GetText(hwndTXT_input, buffer, 999);
 					a = _wtof(buffer);
 					Edit_SetText(hwndTXT_input, L"");		// Cleaning input textbox to not compromise conversion to double
 					check = '+';
@@ -137,6 +138,12 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 7: // -
+				if (check == 0) {
+					Edit_GetText(hwndTXT_input, buffer, 999);
+					a = _wtof(buffer);
+					Edit_SetText(hwndTXT_input, L"");
+					check = '-';
+				}
 				break;
 			case 8:
 				Edit_GetText(hwndTXT_input, buffer, 999);
@@ -154,6 +161,12 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 11: // *
+				if (check == 0) {
+					Edit_GetText(hwndTXT_input, buffer, 999);
+					a = _wtof(buffer);
+					Edit_SetText(hwndTXT_input, L"");
+					check = '*';
+				}
 				break;
 			case 12: // Nothing to do if this button is pressed
 				break;
@@ -163,14 +176,41 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 				Edit_SetText(hwndTXT_input, buffer);
 				break;
 			case 14: // =
-				double numerical_res;
-				WCHAR result[1000];
+				double numerical_res;		// Here I will store the mathematical result (is better to do declarations out of switch's cases)
 				switch (check) {
 				case '+':
+					Edit_GetText(hwndTXT_input, buffer, 999);	// Obtaining of the second number inserted by user
+					b = _wtof(buffer);							// Doing the conversion
+					Edit_SetText(hwndTXT_input, L"");			// Cleaning input textbox (for sure, I don't know what exactly does swprintf_s...)
+					numerical_res = a + b;						// Sum
+					swprintf_s(buffer, L"%lf", numerical_res);	// Converting the numerical result into a string
+					Edit_SetText(hwndTXT_output, buffer);		// Writing on output textbox
+					check = 0;									// Resetting check on 0
+					break;
+				case '-':
+					Edit_GetText(hwndTXT_input, buffer, 999);
 					b = _wtof(buffer);
-					numerical_res = a + b;
-					swprintf_s(result, L"%f", numerical_res);
-					wcscpy_s(buffer, result);
+					Edit_SetText(hwndTXT_input, L"");
+					numerical_res = a - b;
+					swprintf_s(buffer, L"%lf", numerical_res);
+					Edit_SetText(hwndTXT_output, buffer);
+					check = 0;
+					break;
+				case '*':
+					Edit_GetText(hwndTXT_input, buffer, 999);
+					b = _wtof(buffer);
+					Edit_SetText(hwndTXT_input, L"");
+					numerical_res = a * b;
+					swprintf_s(buffer, L"%lf", numerical_res);
+					Edit_SetText(hwndTXT_output, buffer);
+					check = 0;
+					break;
+				case '/':
+					Edit_GetText(hwndTXT_input, buffer, 999);
+					b = _wtof(buffer);
+					Edit_SetText(hwndTXT_input, L"");
+					numerical_res = a / b;
+					swprintf_s(buffer, L"%lf", numerical_res);
 					Edit_SetText(hwndTXT_output, buffer);
 					check = 0;
 					break;
@@ -182,6 +222,12 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 				Edit_SetText(hwndTXT_input, L"");		// Cleaning input textbox
 				break;
 			case 15: // /
+				if (check == 0) {
+					Edit_GetText(hwndTXT_input, buffer, 999);
+					a = _wtof(buffer);
+					Edit_SetText(hwndTXT_input, L"");
+					check = '/';
+				}
 				break;
 			}
 			break;
