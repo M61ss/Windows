@@ -42,7 +42,7 @@ INT WINAPI WinMain(
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));	// I have to set to zero all the memory of the data structure to avoid crashes
 
 	// Here I fill the fields of past declered wc struct. All of these are feature that are documented on Microsoft Learn.
-	// So, if you want to use different values from these used in this example you can visit https://learn.microsoft.com/it-it/training/?source=learn
+	// So, if you want to use different values from these used in this example you can visit https://learn.microsoft.com/it-it/
 	wc.cbSize = sizeof(WNDCLASSEX);					// Simply the size of the structure (like the size given to the malloc for classical C memory allocations)
 	wc.cbClsExtra = 0;								// An extra memory (?)
 	wc.hInstance = hInstance;						// The handle instance of the window has to be the instance assigned to WinMain (the handle is an identifier used by kernel)

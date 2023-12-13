@@ -33,9 +33,9 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 		// Here I assign to this handle a textbox widget
 		hwndTXT_input = CreateWindow(
-			WC_EDIT,								// This is the standard class name for a textbox widget. Other standard widget class name are documented on: https://learn.microsoft.com/it-it/training/?source=learn
+			WC_EDIT,								// This is the standard class name for a textbox widget. Other standard widget class name are documented on: https://learn.microsoft.com/it-it/
 			L"",									// Here I put nothing because I do not want to display nothing default in the textbox
-			WS_CHILD | WS_VISIBLE | ES_RIGHT,		// These are styles specific for a widget. Documentation is on: https://learn.microsoft.com/it-it/training/?source=learn
+			WS_CHILD | WS_VISIBLE | ES_RIGHT,		// These are styles specific for a widget. Documentation is on: https://learn.microsoft.com/it-it/
 			15,										// This is the origin x coord for the widget
 			10,										// This is the origin y coord for the widget
 			270,									// Height of the widget
