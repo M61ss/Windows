@@ -30,7 +30,6 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 	switch (message) {
 	case WM_CREATE:
 		// Here I have to put all operations that I want to execute when the window is opening for the first time (so here I have to create standard widgets for my window)
-		std::cout << "WM_CREATE!\n";
 
 		// Here I assign to this handle a textbox widget
 		hwndTXT_input = CreateWindow(
@@ -263,7 +262,6 @@ INT WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	if (!RegisterClassEx(&wc)) {
 		MessageBox(nullptr, L"Error during the registration of window class", L"ERROR", MB_OK | MB_ICONERROR);
-
 		return -1;
 	}
 
@@ -283,7 +281,6 @@ INT WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	if (!hwndWNDMain) {
 		MessageBox(nullptr, L"Error creating window", L"ERROR", MB_OK | MB_ICONERROR);
-
 		return -2;
 	}
 
