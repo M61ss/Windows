@@ -208,8 +208,13 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 					Edit_GetText(hwndTXT_input, buffer, 999);
 					b = _wtof(buffer);
 					Edit_SetText(hwndTXT_input, L"");
-					numerical_res = a / b;
-					swprintf_s(buffer, L"%lf", numerical_res);
+					if (b != 0) {
+						numerical_res = a / b;
+						swprintf_s(buffer, L"%lf", numerical_res);
+					}
+					else {
+						swprintf_s(buffer, L"ERROR: cannot divide by 0");
+					}
 					Edit_SetText(hwndTXT_output, buffer);
 					check = 0;
 					break;
