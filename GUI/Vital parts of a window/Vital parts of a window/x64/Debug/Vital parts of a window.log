@@ -1,3 +1,3 @@
 ﻿  main.cpp
-C:\Users\mas20\Documents\GitHub projects\WindowsReference\GUI\Vital parts of a window\Vital parts of a window\main.cpp(30): warning C4715: 'WndMainProc': not all control paths return a value
-  Vital parts of a window.vcxproj -> C:\Users\mas20\Documents\GitHub projects\WindowsReference\GUI\Vital parts of a window\x64\Debug\Vital parts of a window.exe
+C:\Users\Mattia\Documents\GitHub projects\WindowsReference\GUI\Vital parts of a window\Vital parts of a window\main.cpp(30): warning C4715: 'WndMainProc': not all control paths return a value
+  Vital parts of a window.vcxproj -> C:\Users\Mattia\Documents\GitHub projects\WindowsReference\GUI\Vital parts of a window\x64\Debug\Vital parts of a window.exe

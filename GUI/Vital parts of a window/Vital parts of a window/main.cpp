@@ -14,11 +14,11 @@ LRESULT CALLBACK WndMainProc(
 	// Here I manage messages switching UINT message
 	switch (message) {
 	case WM_CREATE:
-		std::cout << "WM_CREATE!\n";	// (not necessary)
+		std::cout << "WM_CREATE!\n";	// (not necessary, only for example purpose)
 		break;
 	case WM_DESTROY:
 		// This function allows to close the window
-		PostQuitMessage(0);		// The parameter is the post quit message for the console
+		PostQuitMessage(0);		// The parameter is the post quit message for the console. Its unique parameter is also assigned to wParam, which is the returned parameter in case of absence of this function
 		break;
 	default:
 		// This is a standard function. All messages that are not managed in case defined by programmer, will be managed by it
@@ -29,12 +29,12 @@ LRESULT CALLBACK WndMainProc(
 	// It is clear that there will be a warning saying: not all control paths return a value. It is normal, the function correctly works
 }
 
-// This is the main for a windows application. _In_ and _In_opt_ are named SAL annotations
+// This is the main for a windows application. _In_ and _In_opt_ are named SAL annotations: _In_ means that the corresponding parameter is mandatory; _In_opt_ means that the corresponding parameter is optional
 INT WINAPI WinMain(
 	_In_ HINSTANCE hInstance,			// Handle of the current instance
 	_In_opt_ HINSTANCE hPrevInstance,	// Handle of the previous instance (maybe this is a child of another)
 	_In_ LPSTR lCmdLine,				// A string that contains the command line arguments
-	_In_ int nCmdShow					// ???
+	_In_ int nCmdShow					// It controls the view mode of the window. It is used in ShowWindow function
 ) {
 	WNDCLASSEX wc;		// Here is a data structure that contains basic informations of the window that we want to create
 	MSG msg;			// This object is needed for store messages from other instance
@@ -43,18 +43,18 @@ INT WINAPI WinMain(
 
 	// Here I fill the fields of past declered wc struct. All of these are feature that are documented on Microsoft Learn.
 	// So, if you want to use different values from these used in this example you can visit https://learn.microsoft.com/it-it/
-	wc.cbSize = sizeof(WNDCLASSEX);					// Simply the size of the structure (like the size given to the malloc for classical C memory allocations)
-	wc.cbClsExtra = 0;								// An extra memory (?)
-	wc.hInstance = hInstance;						// The handle instance of the window has to be the instance assigned to WinMain (the handle is an identifier used by kernel)
-	wc.cbWndExtra = 0;								// An extra memory (?)
-	wc.style = CS_HREDRAW | CS_VREDRAW;				// Using '|' (logical 'or') I can combine some styles which I want to have for my window. These are simply concateneted exadecimal codes. Combining them, I can give to my window the styles feature that I want. These are only examples, on Microsoft Learn is possible to find the complete documentation. 
-	wc.hIcon = nullptr;								// This is the taskbar icon for the application
-	wc.hIconSm = nullptr;							// This is the smaller icon (so what?)
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);	// This is the standard cursor, but on the documentation is possible to find all cursor you want
-	wc.hbrBackground = nullptr;						// This is the background color. So the background color will be standard (white)
-	wc.lpszMenuName = nullptr;						// This is the contestual menu of the window (the higher menu bar, like file, edit, view, ecc)
-	wc.lpszClassName = L"wndMainClass";				// This is the name of the class
-	wc.lpfnWndProc = WndMainProc;					// This is a pointer to the information of the current windows process (spannometric definition...for many reason this function doesn't need parameters...)
+	wc.cbSize = sizeof(WNDCLASSEX);								// Simply the size of the structure (like the size given to the malloc for classical C memory allocations)
+	wc.cbClsExtra = 0;											// An extra memory (?)
+	wc.hInstance = hInstance;									// The handle instance of the window has to be the instance assigned to WinMain (the handle is an identifier used by kernel)
+	wc.cbWndExtra = 0;											// An extra memory (?)
+	wc.style = CS_HREDRAW | CS_VREDRAW;							// Using '|' (logical 'or') I can combine some styles which I want to have for my window. These are simply concateneted exadecimal codes. Combining them, I can give to my window the styles feature that I want. These are only examples, see the complete documentation: https://learn.microsoft.com/it-it/ 
+	wc.hIcon = nullptr;											// This is the taskbar icon for the application
+	wc.hIconSm = nullptr;										// This is the smaller icon (so what?)
+	wc.hCursor = LoadCursor(_In_opt_ nullptr, _In_ IDC_ARROW);	// This is the standard cursor, but on the documentation is possible to find all cursor you want
+	wc.hbrBackground = nullptr;									// This is the background color. So the background color will be standard (white)
+	wc.lpszMenuName = nullptr;									// This is the contestual menu of the window (the higher menu bar, like file, edit, view, ecc)
+	wc.lpszClassName = L"wndMainClass";							// This is the name of the class
+	wc.lpfnWndProc = WndMainProc;								// This is a pointer to the information of the current windows process (spannometric definition...for many reason this function doesn't need parameters...)
 
 	// Verifing that wc has been successfully registered
 	if (!RegisterClassEx(&wc)) {
@@ -102,7 +102,7 @@ INT WINAPI WinMain(
 	);
 
 	// This is the last essential part to make the window work correctly
-	// This is a loop to allow the window to recieve messages from windows and controls (including OS)
+	// This is a loop to allow the program to recieve messages from the window (every user interaction with the window is a message)
 	while (GetMessage(&msg, nullptr, 0, 0)) {		// Structure of the function GetMessage: ???
 		TranslateMessage(&msg);		// ???
 		DispatchMessage(&msg);		// ???
