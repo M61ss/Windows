@@ -1,1 +1,5 @@
-﻿  Notes.vcxproj -> C:\Users\Mattia\Documents\Personale\Informatica\GitHub projects\Windows10_System_Programming\NOTES\x64\Debug\Notes.exe
+﻿  Notes.cpp
+C:\Users\Mattia\Documents\GitHubProjects\WindowsReference\NOTES\Notes\Notes.cpp(134,12): error C2374: 'hMutex': redefinition; multiple initialization
+  C:\Users\Mattia\Documents\GitHubProjects\WindowsReference\NOTES\Notes\Notes.cpp(79,12):
+  see declaration of 'hMutex'
+  
