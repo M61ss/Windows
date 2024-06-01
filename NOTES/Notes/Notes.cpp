@@ -1,16 +1,6 @@
 // Windows 10 System Programming - part 1.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#ifndef UNICODE
-// Visual Studio defines this macro by default in all new projects, but it is good pratice to define that everytime
-#define UNICODE
-#endif // !UNICODE
-
-#ifndef _UNICODE
-// Visual Studio defines this macro by default in all new projects, but it is good pratice to define that everytime
-#define _UNICODE
-#endif // !_UNICODE
-
 // I need this macro because the function "GetVersionExW" was deprecated (reason: defense from old versions)
 #define BUILD_WINDOWS
 #include <windows.h>
