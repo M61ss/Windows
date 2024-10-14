@@ -1,6 +1,6 @@
 # Notes
 
-Keeping here some miscellaneous notes about Windows programming.
+Some general notes about Windows programming.
 
 ## Macros
 
@@ -59,5 +59,3 @@ In Windows there are some special data types to manage characters and strings in
 | TCHAR           | char, CHAR          | wchar_t, WCHAR          |
 | LPSTR, PTSTR    | char*, CHAR*, PSTR  | wchar_t*, WCHAR*, PWSTR |
 | LPCTSTR, PCTSTR | const char\*, PCSTR | const wchar_t\*, PCWSTR |
-
-
